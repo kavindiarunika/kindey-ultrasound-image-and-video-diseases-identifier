@@ -1,12 +1,18 @@
 import React from "react";
 import Navbar from "./components/Navbar";
-import Analyzer from "./pages/Analyzer";
+import UploadArea from "./components/UploadArea";
+
 
 function App() {
   return (
     <div>
       <Navbar />
-      <Analyzer />
+
+      <div className="flex-col w-full">
+        <div className="w-1/2"><UploadArea/></div>
+        <div className="w-1/2"></div>
+      </div>
+    
     </div>
   );
 }
