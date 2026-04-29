@@ -1,19 +1,23 @@
 import React, { useState } from "react";
+import { AppContext } from "../kidneycontext/appContext";
+import { useNavigate } from "react-router-dom";
 
 const UploadArea = () => {
-  const [file, setFile] = useState(null);         // blob URL for preview
-  const [rawFile, setRawFile] = useState(null);   // actual File object to send to Flask
-  const [fileType, setFileType] = useState("");
+  const navigate = useNavigate();
+
+  const { result, setResult, enhanceOn, setEnhanceOn } =
+    React.useContext(AppContext);
+
+  const [file, setFile] = useState(null);
+  const [rawFile, setRawFile] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [results, setResults] = useState(null);
   const [error, setError] = useState(null);
 
   const handleFile = (selectedFile) => {
     if (selectedFile) {
       setFile(URL.createObjectURL(selectedFile));
-      setRawFile(selectedFile);           // ✅ keep the real File object
-      setFileType(selectedFile.type);
-      setResults(null);                   // clear previous results
+      setRawFile(selectedFile);
+      setResult(null);
       setError(null);
     }
   };
@@ -27,17 +31,17 @@ const UploadArea = () => {
 
   const handleDragOver = (e) => e.preventDefault();
 
-  // ✅ Send the image to your Flask backend
   const handleAnalyze = async () => {
     if (!rawFile) return;
 
     setLoading(true);
     setError(null);
-    setResults(null);
+    setResult(null);
 
     try {
       const formData = new FormData();
-      formData.append("image", rawFile);   // "image" must match request.files["image"] in Flask
+      formData.append("image", rawFile);
+      formData.append("enhance", enhanceOn ? "true" : "false");
 
       const response = await fetch("http://localhost:5000/api/analyze", {
         method: "POST",
@@ -49,34 +53,48 @@ const UploadArea = () => {
       if (!response.ok) {
         setError(data.error || "Something went wrong.");
       } else {
-        setResults(data);
+        setResult(data);
       }
     } catch (err) {
-      setError("Could not connect to the server. Make sure Flask is running.");
+      setError("Could not connect to server.");
     } finally {
       setLoading(false);
     }
   };
 
-  // Helper: pick a color per label
-  const labelColor = (label) => {
-    const colors = {
-      Normal: "bg-green-100 text-green-800 border-green-300",
-      Cyst:   "bg-yellow-100 text-yellow-800 border-yellow-300",
-      Stone:  "bg-orange-100 text-orange-800 border-orange-300",
-      Tumor:  "bg-red-100 text-red-800 border-red-300",
-    };
-    return colors[label] || "bg-gray-100 text-gray-800 border-gray-300";
-  };
-
   return (
-    <div className="flex flex-col items-center mt-10 gap-6">
+    <div className="w-full h-[090vh] max-w-5xl mx-auto bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/10 p-8">
 
-      {/* ── Upload Box ── */}
+      
+      {/* Enhancement Toggle */}
+      <div className="flex justify-center items-center gap-4 mb-8">
+        <span className="text-2xl text-white font-medium">
+          Image Enhancement
+        </span>
+
+        <button
+          onClick={() => setEnhanceOn(!enhanceOn)}
+          className={`relative w-14 h-7 rounded-full transition-all duration-300 ${
+            enhanceOn ? "bg-emerald-500" : "bg-gray-500"
+          }`}
+        >
+          <span
+            className={`absolute top-1 left-1 w-5 h-5 bg-white rounded-full transition-all duration-300 ${
+              enhanceOn ? "translate-x-7" : ""
+            }`}
+          ></span>
+        </button>
+
+        <span className="text-white font-semibold">
+          {enhanceOn ? "ON" : "OFF"}
+        </span>
+      </div>
+
+      {/* Upload Box */}
       <label
         onDrop={handleDrop}
         onDragOver={handleDragOver}
-        className="w-80 h-56 border-2 border-dashed border-gray-400 rounded-xl cursor-pointer overflow-hidden flex items-center justify-center bg-gray-50 hover:bg-gray-100"
+        className="group relative w-full h-[450px] rounded-3xl border-2 border-dashed border-emerald-400/60 bg-white/5 hover:bg-white/10 hover:border-emerald-300 transition-all duration-300 cursor-pointer overflow-hidden flex items-center justify-center shadow-xl"
       >
         <input
           type="file"
@@ -84,51 +102,70 @@ const UploadArea = () => {
           onChange={handleChange}
           className="hidden"
         />
+
+        {/* background glow */}
+        <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-cyan-400/10"></div>
+
         {file ? (
-          <img src={file} alt="preview" className="w-full h-full object-cover" />
+          <img
+            src={file}
+            alt="preview"
+            className="w-full h-full object-contain p-6 relative z-10"
+          />
         ) : (
-          <div className="text-center text-gray-500">
-            <p className="text-lg font-medium">Drag & Drop</p>
-            <p className="text-sm">or Click to Upload</p>
+          <div className="relative z-10 flex flex-col items-center justify-center text-center px-6">
+
+           
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="70"
+                height="70"
+                fill="currentColor"
+                className="text-gray-400"
+                viewBox="0 0 16 16"
+              >
+                <path d="M10.5 8.5a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
+                <path d="M2 4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2h-1.172a2 2 0 0 1-1.414-.586l-.828-.828A2 2 0 0 0 9.172 2H6.828a2 2 0 0 0-1.414.586l-.828.828A2 2 0 0 1 3.172 4z" />
+              </svg>
+           
+
+            <h2 className="text-3xl  text-white">
+              Upload kidney image or video
+            </h2>
+
+            <p className="text-gray-300 mt-3 text-lg">
+              Drag & Drop image or click to browse
+            </p>
+
           </div>
         )}
       </label>
 
-      {/* ── Analyze Button ── */}
+      {/* Buttons */}
       {rawFile && (
-        <button
-          onClick={handleAnalyze}
-          disabled={loading}
-          className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 font-medium"
-        >
-          {loading ? "Analyzing..." : "Analyze Image"}
-        </button>
-      )}
+        <div className="grid md:grid-cols-2 gap-5 mt-8">
+          <button
+            onClick={handleAnalyze}
+            disabled={loading}
+            className="py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-lg font-semibold shadow-lg transition disabled:opacity-50"
+          >
+            {loading ? "Analyzing..." : "Analyze Image"}
+          </button>
 
-      {/* ── Error Message ── */}
-      {error && (
-        <p className="text-red-500 text-sm">{error}</p>
-      )}
-
-      {/* ── Results ── */}
-      {results && (
-        <div className="w-80 bg-white border border-gray-200 rounded-xl p-4 shadow-sm">
-          <h2 className="font-semibold text-gray-700 mb-3">
-            {results.total_found === 0
-              ? "No findings detected"
-              : `${results.total_found} finding(s) detected`}
-          </h2>
-
-          {results.detections.map((det, i) => (
-            <div
-              key={i}
-              className={`flex justify-between items-center border rounded-lg px-3 py-2 mb-2 text-sm font-medium ${labelColor(det.label)}`}
-            >
-              <span>{det.label}</span>
-              <span>{det.confidence}% confidence</span>
-            </div>
-          ))}
+          <button
+            onClick={() => navigate("/enhanced")}
+            className="py-4 rounded-2xl bg-slate-700 hover:bg-slate-800 text-white text-lg font-semibold shadow-lg transition"
+          >
+            Enhanced Output
+          </button>
         </div>
+      )}
+
+      {/* Error */}
+      {error && (
+        <p className="text-red-400 text-center mt-6 font-medium">
+          {error}
+        </p>
       )}
     </div>
   );

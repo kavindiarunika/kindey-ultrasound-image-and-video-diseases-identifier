@@ -1,0 +1,139 @@
+import React, { useContext } from 'react'
+import { AppContext } from '../kidneycontext/appContext';
+
+const Enhanced = () => {
+  const { result, enhanceOn } = useContext(AppContext);
+
+  if (!result || !result.enhanced_image) {
+    return (
+      <div className="w-full max-w-3xl mx-auto bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/10 p-8 text-center">
+        <div className="py-12">
+          <svg
+            className="w-16 h-16 mx-auto text-gray-400 mb-4 opacity-50"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+            />
+          </svg>
+          <h2 className="text-xl font-semibold text-gray-300 mb-2">
+            No Enhanced Image Yet
+          </h2>
+          <p className="text-gray-400 text-sm">
+            Upload an image with enhancement enabled to see the super-resolution result
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  const handleDownload = () => {
+    try {
+      const byteCharacters = atob(result.enhanced_image);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: 'image/jpeg' });
+
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `enhanced_kidney_image_${new Date().getTime()}.jpg`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    } catch (error) {
+      console.error('Download failed:', error);
+    }
+  };
+
+  return (
+    <div className="w-full max-w-3xl mx-auto">
+      <div className="bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/10 overflow-hidden">
+        
+        {/* Header */}
+        <div className="bg-gradient-to-r from-emerald-600 to-cyan-600 px-8 py-6">
+          <h2 className="text-2xl font-bold text-white">Enhanced Image</h2>
+          <p className="text-emerald-100 text-sm mt-1">4x Super-Resolution ESRGAN Result</p>
+        </div>
+
+        {/* Content */}
+        <div className="p-8">
+          
+          {/* Image Display */}
+          <div className="mb-8 rounded-2xl overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center border border-white/10 shadow-lg">
+            <img
+              src={`data:image/jpeg;base64,${result.enhanced_image}`}
+              alt="Enhanced kidney ultrasound"
+              className="w-full h-auto max-h-[500px] object-contain p-4"
+            />
+          </div>
+
+          {/* Resolution Info */}
+          {result.resolution && (
+            <div className="grid grid-cols-2 gap-4 mb-6 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-400/30 p-4 rounded-lg">
+              <div className="text-center">
+                <p className="text-gray-300 text-sm font-medium">Original Resolution</p>
+                <p className="text-lg font-bold text-emerald-300 mt-2">
+                  {result.resolution.original}
+                </p>
+              </div>
+              <div className="text-center border-l border-white/10">
+                <p className="text-gray-300 text-sm font-medium">Enhanced Resolution</p>
+                <p className="text-lg font-bold text-cyan-300 mt-2">
+                  {result.resolution.enhanced || '4x Upscaled'}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {/* Enhancement Status */}
+          <div className="mb-6 bg-emerald-500/20 border-l-4 border-emerald-400 p-4 rounded-lg">
+            <p className="text-emerald-200 font-medium flex items-center gap-2">
+              <span className="text-lg">✓</span>
+              Image enhanced using ESRGAN Super-Resolution Model
+            </p>
+            <p className="text-emerald-300/80 text-sm mt-2">
+              Resolution increased by 4x for improved clarity and detail detection
+            </p>
+          </div>
+
+          {/* Download Button */}
+          <button
+            onClick={handleDownload}
+            className="w-full bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-700 hover:to-cyan-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-slate-900"
+            aria-label="Download enhanced image"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              fill="currentColor"
+              viewBox="0 0 16 16"
+            >
+              <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5z" />
+              <path d="M7.646 11.854a.5.5 0 0 0 .708 0l3-3a.5.5 0 0 0-.708-.708L8.5 10.293V1.5a.5.5 0 0 0-1 0v8.793L5.354 8.146a.5.5 0 1 0-.708.708l3 3z" />
+            </svg>
+            Download Enhanced Image
+          </button>
+
+          {/* Additional Info */}
+          <p className="text-center text-gray-400 text-xs mt-4">
+            Enhanced image will be saved as JPEG format with high quality (95%)
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Enhanced;
