@@ -8,7 +8,7 @@ const getKidneyAdvice = async (label) => {
       "Content-Type": "application/json",
     },
     body: JSON.stringify({
-      "model": "llama-3.3-70b-versatile",
+      model: "llama-3.3-70b-versatile",
       messages: [
         {
           role: "user",
@@ -73,14 +73,16 @@ const AIAdvice = () => {
 
   return (
     <div className="mt-10 p-6 rounded-2xl bg-white/10 border border-emerald-400/30 text-white">
-      <h2 className="text-2xl font-bold mb-4">AI Patient Advice</h2>
+      <h2 className="text-3xl font-bold mb-4">AI Patient Advice</h2>
 
       {loading ? (
-        <p className="text-gray-300">Generating advice...</p>
+        <p className="text-gray-300 text-xl">Generating advice...</p>
       ) : error ? (
-        <p className="text-red-400">{error}</p>
+        <p className="text-red-400 text-xl">{error}</p>
       ) : (
-        <p className="whitespace-pre-line text-gray-200">{advice}</p>
+        <div className="whitespace-pre-line text-gray-200 text-xl leading-relaxed">
+          {advice}
+        </div>
       )}
     </div>
   );

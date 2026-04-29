@@ -6,29 +6,9 @@ const Enhanced = () => {
 
   if (!result || !result.enhanced_image) {
     return (
-      <div className="w-full max-w-3xl mx-auto bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/10 p-8 text-center">
-        <div className="py-12">
-          <svg
-            className="w-16 h-16 mx-auto text-gray-400 mb-4 opacity-50"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-            />
-          </svg>
-          <h2 className="text-xl font-semibold text-gray-300 mb-2">
-            No Enhanced Image Yet
-          </h2>
-          <p className="text-gray-400 text-sm">
-            Upload an image with enhancement enabled to see the super-resolution result
-          </p>
-        </div>
+      <div className="w-full max-w-3xl mx-auto bg-green-300/30 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/10 p-8 text-center">
+      <p>No enhancement.Turn on enhance button</p>
+        
       </div>
     );
   }
@@ -61,9 +41,9 @@ const Enhanced = () => {
       <div className="bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/10 overflow-hidden">
         
         {/* Header */}
-        <div className="bg-gradient-to-r from-emerald-600 to-cyan-600 px-8 py-6">
-          <h2 className="text-2xl font-bold text-white">Enhanced Image</h2>
-          <p className="text-emerald-100 text-sm mt-1">4x Super-Resolution ESRGAN Result</p>
+        <div className=" ">
+          <h2 className="text-xl  text-white">Enhanced Image</h2>
+         
         </div>
 
         {/* Content */}
@@ -80,7 +60,7 @@ const Enhanced = () => {
 
           {/* Resolution Info */}
           {result.resolution && (
-            <div className="grid grid-cols-2 gap-4 mb-6 bg-gradient-to-r from-emerald-500/10 to-cyan-500/10 border border-emerald-400/30 p-4 rounded-lg">
+            <div className="grid grid-cols-2 gap-4 mb-6  border border-emerald-400/30 p-4 rounded-lg">
               <div className="text-center">
                 <p className="text-gray-300 text-sm font-medium">Original Resolution</p>
                 <p className="text-lg font-bold text-emerald-300 mt-2">

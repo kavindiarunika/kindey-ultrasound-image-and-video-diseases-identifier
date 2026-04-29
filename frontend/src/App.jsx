@@ -8,7 +8,8 @@ import bg from '../public/background.png';
 function App() {
  
   return (
-    <div className="h-screen bg-cover bg-center bg-no-repeat"
+    
+    <div className="min-h-screen bg-cover bg-center bg-no-repeat"
       style={{
         backgroundImage: `
           linear-gradient(rgba(0,0,0,0.65), rgba(0,0,0,0.65)),
@@ -25,7 +26,7 @@ function App() {
      
       </div>
 
-    
+   
 
   );
 }

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { AppContext } from "../kidneycontext/appContext";
 import { useNavigate } from "react-router-dom";
+import Enhanced from "./Enhanced";
 
 const UploadArea = () => {
   const navigate = useNavigate();
@@ -84,10 +85,19 @@ const UploadArea = () => {
             }`}
           ></span>
         </button>
+            {/* Buttons */}
+      {rawFile && (
+           <button
+            onClick={handleAnalyze}
+            disabled={loading}
+            className="mt-2 mb-2 py-4 px-4  rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-lg font-semibold shadow-lg transition disabled:opacity-50"
+          >
+            {loading ? "Analyzing..." : "Analyze Image"}
+          </button>
 
-        <span className="text-white font-semibold">
-          {enhanceOn ? "ON" : "OFF"}
-        </span>
+        
+       
+      )}
       </div>
 
       {/* Upload Box */}
@@ -141,26 +151,12 @@ const UploadArea = () => {
         )}
       </label>
 
-      {/* Buttons */}
-      {rawFile && (
-        <div className="grid md:grid-cols-2 gap-5 mt-8">
-          <button
-            onClick={handleAnalyze}
-            disabled={loading}
-            className="py-4 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-lg font-semibold shadow-lg transition disabled:opacity-50"
-          >
-            {loading ? "Analyzing..." : "Analyze Image"}
-          </button>
+  
 
-          <button
-            onClick={() => navigate("/enhanced")}
-            className="py-4 rounded-2xl bg-slate-700 hover:bg-slate-800 text-white text-lg font-semibold shadow-lg transition"
-          >
-            Enhanced Output
-          </button>
-        </div>
-      )}
-
+      <div className="mt-4">
+         <Enhanced/>
+      </div>
+  
       {/* Error */}
       {error && (
         <p className="text-red-400 text-center mt-6 font-medium">
