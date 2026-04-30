@@ -37,30 +37,19 @@ const Enhanced = () => {
   };
 
   return (
-    <div className="w-full max-w-3xl mx-auto">
+    <div className=" ">
       <div className="bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/10 overflow-hidden">
         
         {/* Header */}
-        <div className=" ">
+        <div className="ml-4 mt-2 ">
           <h2 className="text-xl  text-white">Enhanced Image</h2>
          
         </div>
 
-        {/* Content */}
-        <div className="p-8">
-          
-          {/* Image Display */}
-          <div className="mb-8 rounded-2xl overflow-hidden bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center border border-white/10 shadow-lg">
-            <img
-              src={`data:image/jpeg;base64,${result.enhanced_image}`}
-              alt="Enhanced kidney ultrasound"
-              className="w-full h-auto max-h-[500px] object-contain p-4"
-            />
-          </div>
-
+        
           {/* Resolution Info */}
           {result.resolution && (
-            <div className="grid grid-cols-2 gap-4 mb-6  border border-emerald-400/30 p-4 rounded-lg">
+            <div className="grid grid-cols-2 gap-4 mb-6 bg-black/30 border border-emerald-400/30 p-4 rounded-lg">
               <div className="text-center">
                 <p className="text-gray-300 text-sm font-medium">Original Resolution</p>
                 <p className="text-lg font-bold text-emerald-300 mt-2">
@@ -76,21 +65,25 @@ const Enhanced = () => {
             </div>
           )}
 
-          {/* Enhancement Status */}
-          <div className="mb-6 bg-emerald-500/20 border-l-4 border-emerald-400 p-4 rounded-lg">
-            <p className="text-emerald-200 font-medium flex items-center gap-2">
-              <span className="text-lg">✓</span>
-              Image enhanced using ESRGAN Super-Resolution Model
-            </p>
-            <p className="text-emerald-300/80 text-sm mt-2">
-              Resolution increased by 4x for improved clarity and detail detection
-            </p>
+        {/* Content */}
+        <div className="p-8">
+          
+          {/* Image Display */}
+          <div className="mb-8 rounded-2xl overflow-hidden flex items-center justify-center border border-white/10 shadow-lg">
+            <img
+              src={`data:image/jpeg;base64,${result.enhanced_image}`}
+              alt="Enhanced kidney ultrasound"
+              className="w-full h-auto max-h-[500px] object-contain p-4"
+            />
           </div>
+
+
+        
 
           {/* Download Button */}
           <button
             onClick={handleDownload}
-            className="w-full bg-gradient-to-r from-emerald-600 to-cyan-600 hover:from-emerald-700 hover:to-cyan-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-slate-900"
+            className="w-full bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 shadow-lg focus:outline-none focus:ring-2 focus:ring-emerald-400 focus:ring-offset-2 focus:ring-offset-slate-900"
             aria-label="Download enhanced image"
           >
             <svg

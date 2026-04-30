@@ -64,7 +64,7 @@ const UploadArea = () => {
   };
 
   return (
-    <div className="w-full h-[090vh] max-w-5xl mx-auto bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/10 p-8">
+    <div className="w-full min-h-screen max-w-5xl mx-auto bg-white/10 backdrop-blur-xl rounded-3xl shadow-2xl border border-white/10 p-8">
 
       
       {/* Enhancement Toggle */}
